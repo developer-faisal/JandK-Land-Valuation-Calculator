@@ -31,12 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let final = Math.floor(addVal);
 
     eStamp = (final * deedPercentages.percenOfEstamp) / 100;
-    console.log(eStamp)
+
     let totalEstampValue = Math.round(eStamp);
     let registationFee = (final * deedPercentages.percenOfReg) / 100;
-    console.log(totalEstampValue)
 
-
+    // New Rule Added for Gift Deeds
+    if(typeOfDeed.value === "gift") {
+      eStamp = 0;
+    }
+    
     if (typeOfDeed.value === "gift" && registationFee >= 10000) {
       registationFee = 10000;
     }
