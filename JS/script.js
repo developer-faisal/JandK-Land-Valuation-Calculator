@@ -33,13 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
     eStamp = (final * deedPercentages.percenOfEstamp) / 100;
 
     let totalEstampValue = Math.round(eStamp);
+
+    if (typeOfDeed.value === "gift") {
+      totalEstampValue = 0;
+    }
+
     let registationFee = (final * deedPercentages.percenOfReg) / 100;
 
-    // New Rule Added for Gift Deeds
-    if(typeOfDeed.value === "gift") {
-      eStamp = 0;
-    }
-    
     if (typeOfDeed.value === "gift" && registationFee >= 10000) {
       registationFee = 10000;
     }
@@ -49,10 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
       onlyLand,
       valuation,
       totalEstampValue,
-      registationFee,
+      registationFee
     );
-
-
 
     let landValCheck = parseInt(perKanalRate.value) || 0;
 
@@ -148,9 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
     onlyLand,
     valuation,
     totalEstampValue,
-    registationFee,
+    registationFee
   ) {
-
     document.getElementById("kanalOutput").innerText = kanal.value || 0;
     document.getElementById("marlaOutput").innerText = marla.value || 0;
     document.getElementById("sirsaiOutput").innerText = sirsai.value || 0;
@@ -161,28 +158,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isNaN(valuation)) {
       valuation = 0;
     }
-    let roundStamp = roundToNearestTen(totalEstampValue)
+    let roundStamp = roundToNearestTen(totalEstampValue);
     let totalCostOfLand = formatNumberWithCommas(onlyLand);
     let finalEstamp = formatNumberWithCommas(roundStamp);
     let regFeeInt = roundToNearestTen(registationFee);
     let totalResgitationFee = formatNumberWithCommas(regFeeInt);
 
-
-    console.log("Final " + finalEstamp)
     let totalAmountToBePaid = regFeeInt + roundStamp + serviceCharge;
     let govtRate = parseInt(perKanalRate.value) || 0;
 
     document.getElementById("TotatCostLand").innerText = totalCostOfLand;
     document.getElementById("valuation").innerText =
       formatNumberWithCommas(valuation);
-    document.getElementById("finalEstamp").innerText = finalEstamp;
+    document.getElementById("finalEstamp").innerText =
+      typeOfDeed.value === "gift" ? "exempt" : finalEstamp;
     document.getElementById("govt-rate").innerText =
       formatNumberWithCommas(govtRate);
     document.getElementById("Registration").innerText = totalResgitationFee;
     document.getElementById("consideration").innerText = formatNumberWithCommas(
       onlyLand + valuation
     );
-    document.getElementById("Charge").innerText = formatNumberWithCommas(serviceCharge);
+    document.getElementById("Charge").innerText =
+      formatNumberWithCommas(serviceCharge);
     document.getElementById("totalAmountPaid").innerHTML =
       formatNumberWithCommas(totalAmountToBePaid);
   }
@@ -216,20 +213,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
 //Testing new Things here
 const shareBtn = document.getElementById("shareBtn");
 shareBtn.addEventListener("click", shareTableInfo);
 
-
 function shareTableInfo() {
   const tableInfo = getTableInfo(); // Get the information from the tables
 
-  if (navigator.share) { // Check if the Web Share API is supported
-    navigator.share({
-      title: "Table Information",
-      text: tableInfo,
-    })
+  if (navigator.share) {
+    // Check if the Web Share API is supported
+    navigator
+      .share({
+        title: "Table Information",
+        text: tableInfo,
+      })
       .then(() => console.log("Table shared successfully."))
       .catch((error) => console.error("Error sharing table:", error));
   } else {
